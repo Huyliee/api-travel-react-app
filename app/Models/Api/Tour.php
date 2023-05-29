@@ -4,6 +4,7 @@ namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Api\Image;
 
 class Tour extends Model
 {
@@ -14,5 +15,9 @@ class Tour extends Model
     public $incrementing = false;//Khóa chính tự động tăng -> kg cần
     public $timestamps = false;//Nếu có 2 cột: created_at, updated_at-> kg cần
 
+    public function images()
+    {
+        return $this->hasMany(Image::class,"id_tour","id_tour");
+    }
 
 }

@@ -21,16 +21,19 @@ use App\Http\Controllers\Api\LocationController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+//tour
 Route::get('/tour',[TourController::class,'index']);
+Route::get('/detail/{id}',[TourController::class,'detail']);
 Route::get('/pagnination/tour',[TourController::class,'pagnination']);
 Route::get('/search',[TourController::class,'search']);
-Route::post('/login',[LoginController::class,'login']);
-Route::post('/logout',[LoginController::class,'logout']);
-Route::post('/signup',[LoginController::class,'register']);
 Route::post('/tour/store',[TourController::class,'store']);
 Route::delete('/tour/delete/{id}',[TourController::class,'destroy']);
 Route::get('/tour/show/{id}',[TourController::class,'show']);
 Route::put('/tour/update/{id}',[TourController::class,'update']);
+//Login and Register
+Route::post('/login',[LoginController::class,'login']);
+Route::post('/logout',[LoginController::class,'logout']);
+Route::post('/signup',[LoginController::class,'register']);
 //user
 Route::get('/user',[UserController::class,'index']);
 Route::post('/user/store',[UserController::class,'store']);

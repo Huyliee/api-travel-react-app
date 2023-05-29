@@ -24,6 +24,15 @@ class TourController extends Controller
         ];
         return response()->json($arr,200);
     }
+    public function detail($id)
+    {
+        $tour = Tour::with('images')->find($id);
+        $arr = [
+            'status' => true,
+            'data' => $tour
+        ];
+        return response()->json($arr,200);
+    }
 
     public function pagnination()
     {
