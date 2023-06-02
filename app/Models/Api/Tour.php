@@ -15,6 +15,18 @@ class Tour extends Model
     public $incrementing = false;//Khóa chính tự động tăng -> kg cần
     public $timestamps = false;//Nếu có 2 cột: created_at, updated_at-> kg cần
 
+    protected $fillable = [
+        'id_tour',
+        'name_tour',
+        'date_back',
+        'content_tour',
+        'child_price',
+        'adult_price',
+        'img_tour',
+        'best_seller',
+        'hot_tour',
+    ];
+
     public function images()
     {
         return $this->hasMany(Image::class,"id_tour","id_tour");

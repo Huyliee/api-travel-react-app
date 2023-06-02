@@ -81,12 +81,16 @@ class TourController extends Controller
         // $tour->img_tour = $request->input('img_tour');
         $tour->best_seller = $request->input('best_seller');
         $tour->hot_tour = $request->input('hot_tour');
-        // $imgur = Http::withHeaders([
-        //     'Authorization' => "Client-ID $client_id",
-        //     'Authorization' => "Bearer $access_token",
-        // ])->attach('image', file_get_contents($request->file('img_tour')->getRealPath()), 'image.jpg')
-        //   ->post('https://api.imgur.com/3/image');
-        // $tour->img_tour = $imgur['data']['link'];
+
+        //thêm ảnh lên clound ImageUrl
+        $imgur = Http::withHeaders([
+            'Authorization' => "Client-ID $client_id",
+            'Authorization' => "Bearer $access_token",
+        ])->attach('image', file_get_contents($request->file('img_tour')->getRealPath()), 'image.jpg')
+          ->post('https://api.imgur.com/3/image');
+        $tour->img_tour = $imgur['data']['link'];
+
+        //thêm tour
         $tour->save();
         return response()->json($tour, 201);
     }
@@ -125,16 +129,16 @@ class TourController extends Controller
     {
         $tour = Tour::findOrFail($id);
         $tour->name_tour = $request->input('name_tour');
-        $tour->date_back = $request->input('date_back');
-        $tour->content_tour = $request->input('content_tour');
-        $tour->place_go = $request->input('place_go');
-        $tour->child_price = $request->input('child_price');
-        $tour->adult_price = $request->input('adult_price');
-        $tour->img_tour = $request->input('img_tour');
-        $tour->best_seller = $request->input('best_seller');
-        $tour->hot_tour = $request->input('hot_tour');
+        $tour->email = $request->input('email');
+        $tour->password = $request->input('password');
+        $tour->address = $request->input('address');
+        $tour->phone = $request->input('phone');
+        $tour->img = $request->input('img');
+        $tour->gender = $request->input('gender');
+        $tour->date_of_birth = $request->input('date_of_birth');
+        $tour->permission = $request->input('permission');
         $tour->save();
-        return response()->json($tour, 200);
+        return response()->json($tour, 201);
     }
 
     /**
@@ -145,7 +149,29 @@ class TourController extends Controller
      */
     public function destroy($id)
     {
+        $client_id = env('IMGUR_CLIENT_ID');
+        $client_secret = env('IMGUR_CLIENT_SECRET');
+        $access_token = env('IMGUR_ACCESS_TOKEN');
+
         $tour = Tour::findOrFail($id);
+        $imageUrl = $tour->img_tour;
+
+        //phan tích url
+        $parsedUrl = parse_url($imageUrl);
+        //lấy path của ảnh
+        $path = $parsedUrl['path'];
+        //show thông tin của path như id ảnh , tên ảnh , ...
+        $pathParts = pathinfo($path);
+        //láy id ảnh
+        $imageId = $pathParts['filename']; 
+
+        //xóa ảnh trên clound ImageUrl
+        Http::withHeaders([
+            'Authorization' => "Client-ID $client_id",
+            'Authorization' => "Bearer $access_token",
+        ])->delete("https://api.imgur.com/3/image/$imageId");
+
+        //xóa tour
         $tour->delete();
         return response()->json(['message'=>'Xóa thành công'], 204);
     }
