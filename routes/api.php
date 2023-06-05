@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LocationController;
+use App\Http\Controllers\Api\NewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,3 +43,5 @@ Route::get('/user/show/{id}',[UserController::class,'show']);
 Route::put('/user/update/{id}',[UserController::class,'update']);
 //location
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
+//tin tức 
+Route::get('/news',[NewsController::class,'index']);
