@@ -21,6 +21,7 @@ class LoginController extends Controller
                 return response()->json([
                     'permission'=>$permission,
                     'message'=> 'Chào '.$user->customer_name,
+                    'id'=>$user->id,
                     'access_token' =>$token,
                     'type_token' =>'Bearer',
                 ]);   

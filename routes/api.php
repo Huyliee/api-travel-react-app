@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\NewsController;
+use App\Http\Controllers\Api\DateGoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Route::post('/tour/store',[TourController::class,'store']);
 Route::delete('/tour/delete/{id}',[TourController::class,'destroy']);
 Route::get('/tour/show/{id}',[TourController::class,'show']);
 Route::put('/tour/update/{id}',[TourController::class,'update']);
+Route::post('/tour/checkout/{id}',[TourController::class,'checkout']);
 //Login and Register
 Route::post('/login',[LoginController::class,'login']);
 Route::post('/logout',[LoginController::class,'logout']);
@@ -45,3 +47,5 @@ Route::put('/user/update/{id}',[UserController::class,'update']);
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
 Route::get('/news',[NewsController::class,'index']);
+//Danh sách ngày đi
+Route::get('/datego',[DateGoController::class,'index']);
