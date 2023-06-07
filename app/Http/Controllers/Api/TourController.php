@@ -212,6 +212,8 @@ class TourController extends Controller
         $tour = Tour::find($id);
         $data = $r->all();
         $quantity = $r->qty;
+
+        // Lưu thông tin liên hệ
         $data['status']="No";
         $data['order_time'] = date("Y-m-d H:i:s");
         $data['id_order_tour'] = time();
