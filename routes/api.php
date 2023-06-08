@@ -45,3 +45,4 @@ Route::put('/user/update/{id}',[UserController::class,'update']);
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
 Route::get('/news',[NewsController::class,'index']);
+Route::post('/news/store',[NewsController::class,'store']);
