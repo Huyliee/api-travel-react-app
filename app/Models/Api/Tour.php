@@ -5,6 +5,7 @@ namespace App\Models\Api;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Api\Image;
+use App\Models\Api\DateGo;
 
 class Tour extends Model
 {
@@ -31,5 +32,11 @@ class Tour extends Model
     {
         return $this->hasMany(Image::class,"id_tour","id_tour");
     }
+
+    public function dateGo()
+    {
+        return $this->hasMany(dateGo::class,"id_tour","id_tour");
+    }
+
 
 }

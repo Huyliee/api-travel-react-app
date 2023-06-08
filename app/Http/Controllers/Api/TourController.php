@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Api\Tour;
+use App\Models\Api\Order;
+use App\Models\Api\DetailOrder;
 use Illuminate\Support\Facades\Http;
 
 class TourController extends Controller
@@ -26,7 +28,7 @@ class TourController extends Controller
     }
     public function detail($id)
     {
-        $tour = Tour::with('images')->find($id);
+        $tour = Tour::with('images','dateGo')->find($id);
         $arr = [
             'status' => true,
             'data' => $tour
@@ -204,5 +206,48 @@ class TourController extends Controller
         //xóa tour
         $tour->delete();
         return response()->json(['message'=>'Xóa thành công'], 204);
+    }
+
+    public function checkout(Request $r , $id){
+        $tour = Tour::find($id);
+        $data = $r->all();
+        $quantity = $r->qty;
+
+        // Lưu thông tin liên hệ
+        $data['status']="No";
+        $data['order_time'] = date("Y-m-d H:i:s");
+        $data['id_order_tour'] = time();
+        $order = Order::create($data);
+
+        $adultInfo = $r->input('detail.adultInfo');
+        $childInfo = $r->input('detail.childInfo');
+        
+        // Lưu thông tin khách hàng người lớn
+        foreach ($adultInfo as $adult) {
+            $data = [
+                'id_order' => $order->id_order_tour,
+                'id_tour' => $tour->id_tour,
+                'name_customer' => $adult['name_customer'],
+                'sex' => $adult['gender'],
+                'birth' => $adult['date'],
+                'CMND' => time()
+            ];
+            DetailOrder::create($data);
+        }
+        
+        // Lưu thông tin khách hàng trẻ em
+        foreach ($childInfo as $child) {
+            $data = [
+                'id_order' => $order->id_order_tour,
+                'id_tour' => $tour->id_tour,
+                'name_customer' => $child['name_customer'],
+                'sex' => $child['gender'],
+                'birth' => $child['date'],
+                'CMND' => time()
+            ];
+            DetailOrder::create($data);
+        }
+        $od = DetailOrder::where('id_order',$order->id_order_tour)->get();
+        return response()->json(['detail'=>$od], 201);
     }
 }
