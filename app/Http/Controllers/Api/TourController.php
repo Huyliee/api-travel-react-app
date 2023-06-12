@@ -248,6 +248,15 @@ class TourController extends Controller
             DetailOrder::create($data);
         }
         $od = DetailOrder::where('id_order',$order->id_order_tour)->get();
-        return response()->json(['detail'=>$od], 201);
+        return response()->json(['detail'=>$od,'order'=>$order], 201);
+    }
+
+    public function detailOrder ($id){
+        $order = Order::with('detail_order')->find($id);
+        $arr = [
+            'status' => true,
+            'data' => $order
+        ];
+        return response()->json($arr,200);
     }
 }

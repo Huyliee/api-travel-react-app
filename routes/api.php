@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\DateGoController;
+use App\Http\Controllers\Api\PaymentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::delete('/tour/delete/{id}',[TourController::class,'destroy']);
 Route::get('/tour/show/{id}',[TourController::class,'show']);
 Route::put('/tour/update/{id}',[TourController::class,'update']);
 Route::post('/tour/checkout/{id}',[TourController::class,'checkout']);
+Route::get('/order/detail/{id}',[TourController::class,'detailOrder']);
 //Login and Register
 Route::post('/login',[LoginController::class,'login']);
 Route::post('/logout',[LoginController::class,'logout']);
@@ -49,3 +51,6 @@ Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 Route::get('/news',[NewsController::class,'index']);
 //Danh sách ngày đi
 Route::get('/datego',[DateGoController::class,'index']);
+//Thanh toán online
+Route::post('/create-payment',[PaymentsController::class,'createPayments']);
+Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
