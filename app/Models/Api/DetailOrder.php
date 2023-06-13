@@ -22,5 +22,6 @@ class DetailOrder extends Model
         'CMND',
         'birth',
         'id_date',
+        'age'
     ];
 }

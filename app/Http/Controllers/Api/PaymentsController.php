@@ -15,14 +15,14 @@ class PaymentsController extends Controller
         $vnp_TmnCode = "LQZ52YO1"; //Website ID in VNPAY System
         $vnp_HashSecret = "FYKKMKFECBVOFHMJXUZEQIIKVNQTOFBU"; //Secret key
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://localhost:3000/";
+        $vnp_Returnurl = "http://localhost:3000/booking/payment/success";
         $vnp_apiUrl = "http://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
     
         $vnp_TxnRef = time(); //Mã đơn hàng
     
         $vnp_OrderInfo = 'Thanh toán tour';
         $vnp_OrderType = 'other';
-        $vnp_Amount = $request->input('total_price') * 100;
+        $vnp_Amount = $request->input('amount') * 100;
         $vnp_Locale = 'vn';
         $vnp_BankCode = 'NCB';
         $vnp_IpAddr = $request->ip();
@@ -97,9 +97,9 @@ class PaymentsController extends Controller
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua MoMo";
-        $amount = "10000";
+        $amount = $request->input('amount');
         $orderId = time() . "";
-        $redirectUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+        $redirectUrl = "http://localhost:3000/booking/payment/success";
         $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
         $extraData = "";
         

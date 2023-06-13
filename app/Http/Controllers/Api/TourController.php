@@ -230,7 +230,8 @@ class TourController extends Controller
                 'name_customer' => $adult['name_customer'],
                 'sex' => $adult['gender'],
                 'birth' => $adult['date'],
-                'CMND' => time()
+                'CMND' => time(),
+                'age' => $adult['age']
             ];
             DetailOrder::create($data);
         }
@@ -243,7 +244,8 @@ class TourController extends Controller
                 'name_customer' => $child['name_customer'],
                 'sex' => $child['gender'],
                 'birth' => $child['date'],
-                'CMND' => time()
+                'CMND' => time(),
+                'age' => $child['age']
             ];
             DetailOrder::create($data);
         }
