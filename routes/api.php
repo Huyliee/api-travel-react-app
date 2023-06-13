@@ -47,9 +47,4 @@ Route::put('/user/update/{id}',[UserController::class,'update']);
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
 Route::get('/news',[NewsController::class,'index']);
-<<<<<<< HEAD
 Route::post('/news/store',[NewsController::class,'store']);
-=======
-//Danh sách ngày đi
-Route::get('/datego',[DateGoController::class,'index']);
->>>>>>> c1ec0f5496bd015698205b2af8c9e45ea407c8a3
