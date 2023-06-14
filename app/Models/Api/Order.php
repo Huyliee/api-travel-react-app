@@ -25,4 +25,9 @@ class Order extends Model
         'id_customer',
         'id_date',
     ];
+
+    public function detail_order()
+    {
+        return $this->hasMany(DetailOrder::class,"id_order","id_order_tour");
+    }
 }

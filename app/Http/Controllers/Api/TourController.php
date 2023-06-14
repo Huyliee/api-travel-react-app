@@ -230,7 +230,8 @@ class TourController extends Controller
                 'name_customer' => $adult['name_customer'],
                 'sex' => $adult['gender'],
                 'birth' => $adult['date'],
-                'CMND' => time()
+                'CMND' => time(),
+                'age' => $adult['age']
             ];
             DetailOrder::create($data);
         }
@@ -243,11 +244,21 @@ class TourController extends Controller
                 'name_customer' => $child['name_customer'],
                 'sex' => $child['gender'],
                 'birth' => $child['date'],
-                'CMND' => time()
+                'CMND' => time(),
+                'age' => $child['age']
             ];
             DetailOrder::create($data);
         }
         $od = DetailOrder::where('id_order',$order->id_order_tour)->get();
-        return response()->json(['detail'=>$od], 201);
+        return response()->json(['detail'=>$od,'order'=>$order], 201);
+    }
+
+    public function detailOrder ($id){
+        $order = Order::with('detail_order')->find($id);
+        $arr = [
+            'status' => true,
+            'data' => $order
+        ];
+        return response()->json($arr,200);
     }
 }
