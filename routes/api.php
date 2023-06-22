@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\DateGoController;
 use App\Http\Controllers\Api\PaymentsController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,12 +50,13 @@ Route::put('/user/update/{id}',[UserController::class,'update']);
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
 Route::get('/news',[NewsController::class,'index']);
-<<<<<<< HEAD
 Route::post('/news/store',[NewsController::class,'store']);
-=======
 //Danh sách ngày đi
 Route::get('/datego',[DateGoController::class,'index']);
 //Thanh toán online
 Route::post('/create-payment',[PaymentsController::class,'createPayments']);
 Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
->>>>>>> c38d82f54ed1764dc6729042b1d2f1b21874f5ef
+// Đơn đặt tour
+Route::get('/order',[OrderController::class,'index']);
+Route::get('/order/{id}',[OrderController::class,'findOrder']);
+Route::get('/order/{id}',[OrderController::class,'orderCustomer']);

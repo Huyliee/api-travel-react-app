@@ -54,12 +54,12 @@ class NewsController extends Controller
         
 
         //thêm ảnh lên clound ImageUrl
-        $imgur = Http::withHeaders([
-            'Authorization' => "Client-ID $client_id",
-            'Authorization' => "Bearer $access_token",
-        ])->attach('image', file_get_contents($request->file('img_news')->getRealPath()), 'image.jpg')
-          ->post('https://api.imgur.com/3/image');
-        $news->img_news = $imgur['data']['link'];
+        // $imgur = Http::withHeaders([
+        //     'Authorization' => "Client-ID $client_id",
+        //     'Authorization' => "Bearer $access_token",
+        // ])->attach('image', file_get_contents($request->file('img_news')->getRealPath()), 'image.jpg')
+        //   ->post('https://api.imgur.com/3/image');
+        // $news->img_tour = $imgur['data']['link'];
 
         //thêm news
         $news->save();

@@ -3,6 +3,7 @@
 namespace App\Models\api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Api\DateGo;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -29,5 +30,9 @@ class Order extends Model
     public function detail_order()
     {
         return $this->hasMany(DetailOrder::class,"id_order","id_order_tour");
+    }
+    public function date_go()
+    {
+        return $this->belongsTo(DateGo::class,"id_date","id");
     }
 }
