@@ -49,12 +49,9 @@ Route::put('/user/update/{id}',[UserController::class,'update']);
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
 Route::get('/news',[NewsController::class,'index']);
-<<<<<<< HEAD
 Route::post('/news/store',[NewsController::class,'store']);
-=======
 //Danh sách ngày đi
 Route::get('/datego',[DateGoController::class,'index']);
 //Thanh toán online
 Route::post('/create-payment',[PaymentsController::class,'createPayments']);
 Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
->>>>>>> c38d82f54ed1764dc6729042b1d2f1b21874f5ef
