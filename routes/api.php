@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\DateGoController;
 use App\Http\Controllers\Api\PaymentsController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,3 +56,7 @@ Route::get('/datego',[DateGoController::class,'index']);
 //Thanh toán online
 Route::post('/create-payment',[PaymentsController::class,'createPayments']);
 Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
+// Đơn đặt tour
+Route::get('/order',[OrderController::class,'index']);
+Route::get('/order/{id}',[OrderController::class,'findOrder']);
+Route::get('/order/{id}',[OrderController::class,'orderCustomer']);
