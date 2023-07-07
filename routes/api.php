@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\DateGoController;
 use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\AnalyticController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,10 +43,12 @@ Route::post('/logout',[LoginController::class,'logout']);
 Route::post('/signup',[LoginController::class,'register']);
 //user
 Route::get('/user',[UserController::class,'index']);
+Route::get('/user/detail/{id}',[UserController::class,'show']);
 Route::post('/user/store',[UserController::class,'store']);
 Route::delete('/user/delete/{id}',[UserController::class,'destroy']);
 Route::get('/user/show/{id}',[UserController::class,'show']);
 Route::put('/user/update/{id}',[UserController::class,'update']);
+Route::get('/user/social/{email}',[UserController::class,'getCustomer']);
 //location
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 

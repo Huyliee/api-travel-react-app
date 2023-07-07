@@ -13,7 +13,7 @@ class User extends Model
     protected $primaryKey ='id';//Nếu khóa là id -> không cần
     protected $keyType = 'string';//kiểu khóa chính int -> không cần
     public $incrementing = false;//Khóa chính tự động tăng -> kg cần
-    public $timestamps = false;//Nếu có 2 cột: created_at, updated_at-> kg cần
+    public $timestamps = true;//Nếu có 2 cột: created_at, updated_at-> kg cần
 
     protected $fillable = [
         'id',
@@ -23,6 +23,9 @@ class User extends Model
         'address',
         'phone',
         'gender',
-        'date_of_birth'
+        'date_of_birth',
+        'permission',
+        'created_at',
+        'updated_at'
     ];
 }

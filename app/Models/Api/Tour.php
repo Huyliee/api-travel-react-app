@@ -38,5 +38,9 @@ class Tour extends Model
         return $this->hasMany(dateGo::class,"id_tour","id_tour");
     }
 
+    public function order()
+    {
+        
+    }
 
 }
