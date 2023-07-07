@@ -66,7 +66,11 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user);
+        $arr = [
+            'status' => true,
+            'data' => $user
+        ];
+        return response()->json($arr,200);
     }
 
     /**
@@ -79,7 +83,10 @@ class UserController extends Controller
     {
         //
     }
-
+    public function getCustomer($email){
+        $user = User::where('email',$email)->get();
+        return response()->json($user, 201);
+    }
     /**
      * Update the specified resource in storage.
      *

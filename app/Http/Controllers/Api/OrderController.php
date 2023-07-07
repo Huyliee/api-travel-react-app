@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Api\Order;
+use App\Models\Api\Tour;
 
 class OrderController extends Controller
 {
@@ -87,9 +88,10 @@ public function orderCustomer($id)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id , $id_tour)
     {
-        //
+        $order = Order::find($id);
+        $tour = Tour::find($id_tour);
     }
 
     /**
@@ -123,6 +125,22 @@ public function orderCustomer($id)
      */
     public function destroy($id)
     {
-        //
+        $order = Order::find($id);
+        if ($order) {
+            if ($order->detailOrder()->count() > 0) {
+                return response()->json(['message' => 'Không thể xóa đơn đặt vì tồn tại chi tiết hóa đơn'], 400);
+            } else {
+                $order->delete();
+                return response()->json(['message' => 'Đơn đặt tour đã được xóa thành công.'], 200);
+            }
+        } else {
+            return response()->json(['message' => 'Không tìm thấy đơn đặt hàng'], 404);
+        }
+    }
+    public function accept($id){
+        $order = Order::find($id);
+        $order->status = "Yes";
+        $order->save();
+        return response()->json(['order' => $order], 201);
     }
 }

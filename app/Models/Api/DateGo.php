@@ -19,4 +19,8 @@ class DateGo extends Model
     {
         return $this->belongsTo(Tour::class,"id_tour","id_tour");
     }
+    public function order()
+    {
+        return $this->hasMany(dateGo::class,"id","id_date");
+    }
 }
