@@ -85,12 +85,12 @@ class TourController extends Controller
         $tour->hot_tour = $request->input('hot_tour');
 
         //thêm ảnh lên clound ImageUrl
-        $imgur = Http::withHeaders([
-            'Authorization' => "Client-ID $client_id",
-            'Authorization' => "Bearer $access_token",
-        ])->attach('image', file_get_contents($request->file('img_tour')->getRealPath()), 'image.jpg')
-          ->post('https://api.imgur.com/3/image');
-        $tour->img_tour = $imgur['data']['link'];
+        // $imgur = Http::withHeaders([
+        //     'Authorization' => "Client-ID $client_id",
+        //     'Authorization' => "Bearer $access_token",
+        // ])->attach('image', file_get_contents($request->file('img_tour')->getRealPath()), 'image.jpg')
+        //   ->post('https://api.imgur.com/3/image');
+        // $tour->img_tour = $imgur['data']['link'];
 
         //thêm tour
         $tour->save();
@@ -185,7 +185,11 @@ class TourController extends Controller
         $client_secret = env('IMGUR_CLIENT_SECRET');
         $access_token = env('IMGUR_ACCESS_TOKEN');
 
-        $tour = Tour::findOrFail($id);
+        $tour = Tour::with('dateGo.order.detail_order')->find($id);
+
+        $hasOrders = $tour->dateGo->flatMap(function ($dateGo) {
+            return $dateGo->order->pluck('detail_order');
+        })->pluck('id_tour')->contains($id);
         $imageUrl = $tour->img_tour;
 
         //phan tích url
@@ -204,8 +208,13 @@ class TourController extends Controller
         ])->delete("https://api.imgur.com/3/image/$imageId");
 
         //xóa tour
-        $tour->delete();
-        return response()->json(['message'=>'Xóa thành công'], 204);
+        if($hasOrders)
+        {
+            return response()->json(['message'=>'Xóa không thành công vì tour còn đơn đặt tour'], 204);
+        }else{
+            $tour->delete();
+            return response()->json(['message'=>'Xóa thành công'], 204);
+        }
     }
 
     public function checkout(Request $r , $id){

@@ -17,9 +17,8 @@ class PaymentsController extends Controller
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = "http://localhost:3000/booking/payment/success";
         $vnp_apiUrl = "http://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
-    
         $vnp_TxnRef = time(); //Mã đơn hàng
-    
+
         $vnp_OrderInfo = 'Thanh toán tour';
         $vnp_OrderType = 'other';
         $vnp_Amount = $request->input('amount') * 100;
@@ -127,7 +126,7 @@ class PaymentsController extends Controller
             $jsonResult = json_decode($result, true);  // decode json
          
         //  error_log( print_r( $jsonResult, true ) );
-        //  header('Location: '.$jsonResult['payUrl']);
+        // header('Location: '.$jsonResult['payUrl']);
         return response()->json($jsonResult);
     }
 }

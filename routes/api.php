@@ -63,3 +63,8 @@ Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
 Route::get('/order',[OrderController::class,'index']);
 Route::get('/order/{id}',[OrderController::class,'findOrder']);
 Route::get('/order/{id}',[OrderController::class,'orderCustomer']);
+Route::delete('/order/delete/{id}',[OrderController::class,'destroy']);
+Route::put('/order/accept/{id}',[OrderController::class,'accept']);
+//Thống kê
+Route::get('/analytic/quantityData',[AnalyticController::class,'quantityDataTable']);
+Route::get('/analytic/revenueData',[AnalyticController::class,'revenueData']);
