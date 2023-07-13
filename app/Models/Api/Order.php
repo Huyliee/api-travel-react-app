@@ -35,4 +35,6 @@ class Order extends Model
     {
         return $this->belongsTo(DateGo::class,"id_date","id");
     }
+
+
 }

@@ -88,10 +88,15 @@ public function orderCustomer($id)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id , $id_tour)
+    public function show($id)
     {
-        $order = Order::find($id);
-        $tour = Tour::find($id_tour);
+        $order = Order::with('detail_order','date_go')->find($id);
+        $arr = [
+            'status' => true,
+            'data' => $order
+        ];
+        return response()->json($arr,200);
+        
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Api\News;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 
 class NewsController extends Controller
 {
@@ -50,16 +51,28 @@ class NewsController extends Controller
         $news->id_news = $request->input('id_news');
         $news->title_news = $request->input('title_news');
         $news->date = $request->input('date');
+        $img_news = $request->file('img_news');
         $news->content_news = $request->input('content_news');
         
 
         //thêm ảnh lên clound ImageUrl
-        // $imgur = Http::withHeaders([
-        //     'Authorization' => "Client-ID $client_id",
-        //     'Authorization' => "Bearer $access_token",
-        // ])->attach('image', file_get_contents($request->file('img_news')->getRealPath()), 'image.jpg')
-        //   ->post('https://api.imgur.com/3/image');
-        // $news->img_tour = $imgur['data']['link'];
+        $client = new Client();
+
+        $response = $client->request('POST', 'https://api.imgur.com/3/image', [
+            'headers' => [
+                'Authorization' => 'Client-ID 0e40bfbb10cc564',
+                'Authorization' => "Bearer b1b610785d40e309d8111cbae409edbf55184545"
+            ],
+            'multipart' => [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($img_news->getPathname(), 'r'),
+                ],
+            ],
+        ]);
+
+        $responseData = json_decode($response->getBody(), true);
+        $news->img_news = $responseData['data']['link'];
 
         //thêm news
         $news->save();
@@ -74,7 +87,12 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        //
+        $news = News::find($id);
+        $arr = [
+            'status' => true,
+            'data' => $news
+        ];
+        return response()->json($arr,200);
     }
 
     /**
@@ -108,6 +126,8 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $news = News::findOrFail($id);
+        $news->delete();
+        return response()->json(['message'=>'Xóa thành công'], 204);
     }
 }

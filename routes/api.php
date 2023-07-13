@@ -54,14 +54,18 @@ Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
 Route::get('/news',[NewsController::class,'index']);
 Route::post('/news/store',[NewsController::class,'store']);
+Route::get('/news/detail/{id}',[NewsController::class,'show']);
+Route::delete('/news/delete/{id}',[NewsController::class,'destroy']);
 //Danh sách ngày đi
 Route::get('/datego',[DateGoController::class,'index']);
+Route::get('/datego/order/{id}',[DateGoController::class,'order']);
 //Thanh toán online
 Route::post('/create-payment',[PaymentsController::class,'createPayments']);
 Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
 // Đơn đặt tour
 Route::get('/order',[OrderController::class,'index']);
-Route::get('/order/{id}',[OrderController::class,'findOrder']);
+Route::get('/order/{id}',[OrderController::class,'findOrshder']);
+Route::get('/order/detail/{id}',[OrderController::class,'show']);
 Route::get('/order/{id}',[OrderController::class,'orderCustomer']);
 Route::delete('/order/delete/{id}',[OrderController::class,'destroy']);
 Route::put('/order/accept/{id}',[OrderController::class,'accept']);

@@ -24,6 +24,19 @@ class DateGoController extends Controller
         return response()->json($arr,200);
     }
 
+    public function order($id){
+        $dateGo = DateGo::with('order.detail_order')->find($id);
+        $detailOrders = $dateGo->order->flatMap(function ($order) {
+            return $order->detail_order;
+        });
+
+        $arr = [
+            'status' => true,
+            'data' => $detailOrders
+        ];
+        return response()->json($arr,200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
