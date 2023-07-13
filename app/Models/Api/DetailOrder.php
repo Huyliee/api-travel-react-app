@@ -4,6 +4,7 @@ namespace App\Models\api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Api\Tour;
 
 class DetailOrder extends Model
 {
@@ -24,4 +25,9 @@ class DetailOrder extends Model
         'id_date',
         'age'
     ];
+
+    public function tour()
+    {
+        return $this->belongsTo(Tour::class, "id_tour", "id_tour");
+    }
 }

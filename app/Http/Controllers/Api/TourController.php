@@ -6,8 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Api\Tour;
 use App\Models\Api\Order;
+use App\Models\Api\DateGo;
 use App\Models\Api\DetailOrder;
+use App\Models\Api\TourLocation;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmationMail;
 
 class TourController extends Controller
 {
@@ -45,10 +50,34 @@ class TourController extends Controller
     public function search(Request $r)
     {
         $name = $r->input('name');
+        $price = $r->input('adult_price');
+        $tourType = $r->input('tourType');
+        $tourLocationId = $r->input('id_location');
+    
+        $query = Tour::query();
+    
+        if (!empty($name)) {
+            $query->where('name_tour', 'like', '%' . $name . '%');
+        }
+    
+        if (!empty($price)) {
+            $query->where('adult_price', '>=', $price);
+        }
+    
+        if (!empty($tourType)) {
+            $query->where('tour_type', $tourType);
+        }
 
-        $tours = Tour::where('name_tour','like','%'.$name.'%')->get();
+        if (!empty($tourLocationId)) {
+            $query->whereHas('location', function ($q) use ($tourLocationId) {
+                $q->where('id_location', $tourLocationId);
+            });
+        }
 
-        return response()->json(['tours'=>$tours]);
+                
+        $tours = $query->get();
+    
+        return response()->json(['tours' => $tours]);
     }
 
     /**
@@ -80,18 +109,28 @@ class TourController extends Controller
         $tour->place_go = $request->input('place_go');
         $tour->child_price = $request->input('child_price');
         $tour->adult_price = $request->input('adult_price');
-        // $tour->img_tour = $request->input('img_tour');
+        $img_tour = $request->file('img_tour');
         $tour->best_seller = $request->input('best_seller');
         $tour->hot_tour = $request->input('hot_tour');
 
         //thêm ảnh lên clound ImageUrl
-        // $imgur = Http::withHeaders([
-        //     'Authorization' => "Client-ID $client_id",
-        //     'Authorization' => "Bearer $access_token",
-        // ])->attach('image', file_get_contents($request->file('img_tour')->getRealPath()), 'image.jpg')
-        //   ->post('https://api.imgur.com/3/image');
-        // $tour->img_tour = $imgur['data']['link'];
+        $client = new Client();
 
+        $response = $client->request('POST', 'https://api.imgur.com/3/image', [
+            'headers' => [
+                'Authorization' => 'Client-ID 0e40bfbb10cc564',
+                'Authorization' => "Bearer b1b610785d40e309d8111cbae409edbf55184545"
+            ],
+            'multipart' => [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($img_tour->getPathname(), 'r'),
+                ],
+            ],
+        ]);
+
+        $responseData = json_decode($response->getBody(), true);
+        $tour->img_tour = $responseData['data']['link'];
         //thêm tour
         $tour->save();
         return response()->json($tour, 201);
@@ -227,10 +266,17 @@ class TourController extends Controller
         $data['order_time'] = date("Y-m-d H:i:s");
         $data['id_order_tour'] = time();
         $order = Order::create($data);
-
+        Mail::to($data['email'])->send(new OrderConfirmationMail($order));
         $adultInfo = $r->input('detail.adultInfo');
         $childInfo = $r->input('detail.childInfo');
-        
+
+        $totalQuantity = count($adultInfo) + count($childInfo);
+        $idDateGo = $order->id_date;
+        $dateGo = DateGo::find($idDateGo);
+        $seats = $dateGo->seats;
+        $updateDate =  $seats - $totalQuantity;
+        $dateGo->seats = $updateDate;
+        $dateGo->save();
         // Lưu thông tin khách hàng người lớn
         foreach ($adultInfo as $adult) {
             $data = [

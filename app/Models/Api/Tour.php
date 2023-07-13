@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Api\Image;
 use App\Models\Api\DateGo;
+use App\Models\Api\TourLocation;
 
 class Tour extends Model
 {
@@ -38,9 +39,9 @@ class Tour extends Model
         return $this->hasMany(dateGo::class,"id_tour","id_tour");
     }
 
-    public function order()
+    public function location()
     {
-        
+        return $this->hasMany(TourLocation::class,"id_tour","id_tour");
     }
 
 }
