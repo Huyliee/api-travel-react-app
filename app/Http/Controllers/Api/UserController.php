@@ -72,6 +72,24 @@ class UserController extends Controller
         ];
         return response()->json($arr,200);
     }
+    public function findUserFace($email){
+        $user = User::where('email',$email)->get();
+        $arr = [
+            'status' => true,
+            'data' => $user
+        ];
+        return response()->json($arr,200);
+    }
+    public function changePass($id , Request $r){
+        $user = User::findOrFail($id);
+        $user->password = Hash::make($r->input('newPass'));
+        $user->save();
+        $arr = [
+            'status' => true,
+            'data' => $user
+        ];
+        return response()->json($arr,200);
+    }
 
     /**
      * Show the form for editing the specified resource.

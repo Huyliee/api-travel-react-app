@@ -45,10 +45,12 @@ Route::post('/signup',[LoginController::class,'register']);
 Route::get('/user',[UserController::class,'index']);
 Route::get('/user/detail/{id}',[UserController::class,'show']);
 Route::post('/user/store',[UserController::class,'store']);
+Route::put('/user/changepass/{id}',[UserController::class,'changePass']);
 Route::delete('/user/delete/{id}',[UserController::class,'destroy']);
 Route::get('/user/show/{id}',[UserController::class,'show']);
 Route::put('/user/update/{id}',[UserController::class,'update']);
 Route::get('/user/social/{email}',[UserController::class,'getCustomer']);
+Route::get('/user/faceio/{email}',[UserController::class,'findUserFace']);
 //location
 Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
