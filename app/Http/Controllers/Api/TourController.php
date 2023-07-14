@@ -68,13 +68,6 @@ class TourController extends Controller
             $query->where('tour_type', $tourType);
         }
 
-        // $tourss = LocationTour::whereHas('tour', function ($query) use ($tourLocationId) {
-        //     $query->whereHas('location', function ($q) use ($tourLocationId) {
-        //         $q->where('id_location', $tourLocationId);
-        //     });
-        // })->get();
-        
-        // Hoặc có thể truy cập vào tour thông qua mối quan hệ:
         if (!empty($tourLocationId)) {
             $query->whereHas('location', function ($q) use ($tourLocationId) {
                 $q->where('id_location', $tourLocationId);
