@@ -25,6 +25,7 @@ class Order extends Model
         'address',
         'id_customer',
         'id_date',
+        'total_price'
     ];
 
     public function detail_order()

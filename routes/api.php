@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DateGoController;
 use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AnalyticController;
+use App\Http\Controllers\Api\GuideController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,7 @@ Route::delete('/news/delete/{id}',[NewsController::class,'destroy']);
 //Danh sách ngày đi
 Route::get('/datego',[DateGoController::class,'index']);
 Route::get('/datego/order/{id}',[DateGoController::class,'order']);
+Route::post('/datego/store',[DateGoController::class,'store']);
 //Thanh toán online
 Route::post('/create-payment',[PaymentsController::class,'createPayments']);
 Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
@@ -74,3 +76,5 @@ Route::put('/order/accept/{id}',[OrderController::class,'accept']);
 //Thống kê
 Route::get('/analytic/quantityData',[AnalyticController::class,'quantityDataTable']);
 Route::get('/analytic/revenueData',[AnalyticController::class,'revenueData']);
+//Hướng dẫn viên
+Route::get('/guide',[GuideController::class,'index']);

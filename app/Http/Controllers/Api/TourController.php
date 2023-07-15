@@ -104,7 +104,6 @@ class TourController extends Controller
         $access_token = env('IMGUR_ACCESS_TOKEN');
         $tour->id_tour = $request->input('id_tour');
         $tour->name_tour = $request->input('name_tour');
-        $tour->date_back = $request->input('date_back');
         $tour->content_tour = $request->input('content_tour');
         $tour->place_go = $request->input('place_go');
         $tour->child_price = $request->input('child_price');
@@ -177,40 +176,34 @@ class TourController extends Controller
         $tour->adult_price = $request->input('adult_price');
         $tour->best_seller = $request->input('best_seller');
         $tour->hot_tour = $request->input('hot_tour');
-
-        $client_id = env('IMGUR_CLIENT_ID');
-        $client_secret = env('IMGUR_CLIENT_SECRET');
-        $access_token = env('IMGUR_ACCESS_TOKEN');
-        $oldImg = $tour->img_tour;
-        $newImg = $request->file('img_tour');
-        
-        if($newImg){
-            $imgur = Http::withHeaders([
-                'Authorization' => "Client-ID $client_id",
-                'Authorization' => "Bearer $access_token",
-            ])->attach('image', file_get_contents($newImg->getRealPath()), 'image.jpg')
-              ->post('https://api.imgur.com/3/image');
-            $tour->img_tour = $imgur['data']['link'];
-            if($oldImg){
-                 //phan tích url
-                $parsedUrl = parse_url($oldImg);
-                //lấy path của ảnh
-                $path = $parsedUrl['path'];
-                //show thông tin của path như id ảnh , tên ảnh , ...
-                $pathParts = pathinfo($path);
-                //láy id ảnh
-                $imageId = $pathParts['filename']; 
-
-                //xóa ảnh trên clound ImageUrl
-                Http::withHeaders([
-                    'Authorization' => "Client-ID $client_id",
-                    'Authorization' => "Bearer $access_token",
-                ])->delete("https://api.imgur.com/3/image/$imageId");
-            }
+    
+        if ($request->hasFile('img_tour')) {
+            $img_tour = $request->file('img_tour');
+            
+            // Lấy đường dẫn tạm thời của tệp tin
+            $tempFilePath = $img_tour->getPathname();
+      
+            $client = new Client();
+            $response = $client->request('POST', 'https://api.imgur.com/3/image', [
+                'headers' => [
+                    'Authorization' => 'Bearer b1b610785d40e309d8111cbae409edbf55184545',
+                ],
+                'multipart' => [
+                    [
+                        'name' => 'image',
+                        'contents' => fopen($tempFilePath, 'r'),
+                    ],
+                ],
+            ]);
+      
+            $responseData = json_decode($response->getBody(), true);
+            $tour->img_tour = $responseData['data']['link'];
         }
+    
         $tour->save();
         return response()->json($tour, 201);
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -231,20 +224,33 @@ class TourController extends Controller
         })->pluck('id_tour')->contains($id);
         $imageUrl = $tour->img_tour;
 
-        //phan tích url
-        $parsedUrl = parse_url($imageUrl);
-        //lấy path của ảnh
-        $path = $parsedUrl['path'];
-        //show thông tin của path như id ảnh , tên ảnh , ...
-        $pathParts = pathinfo($path);
-        //láy id ảnh
-        $imageId = $pathParts['filename']; 
+        // Phân tích cú pháp link ảnh để lấy phần cuối cùng
+        $imagePath = parse_url($imageUrl, PHP_URL_PATH);
+        
+        // Lấy tên tệp ảnh từ đường dẫn
+        $imageFileName = basename($imagePath);
+        
+        // Trích xuất $imageId bằng cách loại bỏ phần đuôi tệp
+        $imageId = pathinfo($imageFileName, PATHINFO_FILENAME);
+
+        $client = new Client();
+        $response = $client->request('GET', "https://api.imgur.com/3/image/$imageId", [
+            'headers' => [
+                'Authorization' => 'Bearer b1b610785d40e309d8111cbae409edbf55184545',
+            ],
+        ]);
+
+        $responseData = json_decode($response->getBody(), true);
+        $imageDeleteHash = $responseData['data']['deletehash'];
+        
 
         //xóa ảnh trên clound ImageUrl
-        Http::withHeaders([
-            'Authorization' => "Client-ID $client_id",
-            'Authorization' => "Bearer $access_token",
-        ])->delete("https://api.imgur.com/3/image/$imageId");
+        $client = new Client();
+        $response = $client->request('DELETE', "https://api.imgur.com/3/image/$imageDeleteHash", [
+            'headers' => [
+                'Authorization' => 'Bearer b1b610785d40e309d8111cbae409edbf55184545',
+            ],
+        ]);
 
         //xóa tour
         if($hasOrders)

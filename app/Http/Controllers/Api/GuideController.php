@@ -4,9 +4,9 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Api\DateGo;
+use App\Models\Api\Guide;
 
-class DateGoController extends Controller
+class GuideController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,24 +15,11 @@ class DateGoController extends Controller
      */
     public function index()
     {
-        $dateGo = DateGo::all();
+        $guide = Guide::all();
         $arr = [
             'status' => true,
-            'message' => "Danh sách tin tức",
-            'data' => $dateGo
-        ];
-        return response()->json($arr,200);
-    }
-
-    public function order($id){
-        $dateGo = DateGo::with('order.detail_order')->find($id);
-        $detailOrders = $dateGo->order->flatMap(function ($order) {
-            return $order->detail_order;
-        });
-
-        $arr = [
-            'status' => true,
-            'data' => $detailOrders
+            'message' => "Danh sách hướng dẫn viên",
+            'data' => $guide
         ];
         return response()->json($arr,200);
     }
@@ -55,13 +42,7 @@ class DateGoController extends Controller
      */
     public function store(Request $request)
     {
-        $dateGo = new DateGo;
-        $dateGo->id_tour = $request->input('id_tour');
-        $dateGo->date = $request->input('date');
-        $dateGo->id_guide = $request->input('id_guide');
-        $dateGo->seats = $request->input('seats');
-        $dateGo->save();
-        return response()->json($dateGo, 201);
+        //
     }
 
     /**
