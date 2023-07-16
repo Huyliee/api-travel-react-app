@@ -90,7 +90,7 @@ public function orderCustomer($id)
      */
     public function show($id)
     {
-        $order = Order::with('detail_order','date_go')->find($id);
+        $order = Order::with('detail_order','date_go','payment')->find($id);
         $arr = [
             'status' => true,
             'data' => $order
