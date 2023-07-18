@@ -36,4 +36,32 @@ class AnalyticController extends Controller
 
     return response()->json($revenueData);
     }
+
+    public function getTourOrdersCount()
+    {
+        $tours = Tour::with('dateGo.order')->get();
+
+        $result = [];
+
+        foreach ($tours as $tour) {
+            $tourData = [
+                'tour_id' => $tour->id_tour,
+                'tour_name' => $tour->name_tour,
+                'order_count_by_date' => [],
+            ];
+
+            foreach ($tour->dateGo as $dateGo) {
+                $orderCount = $dateGo->order->count();
+
+                $tourData['order_count_by_date'][] = [
+                    'date_go' => $dateGo->date,
+                    'order_count' => $orderCount,
+                ];
+            }
+
+            $result[] = $tourData;
+        }
+
+        return response()->json($result);
+    }
 }

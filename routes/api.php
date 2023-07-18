@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AnalyticController;
 use App\Http\Controllers\Api\GuideController;
+use App\Http\Controllers\Api\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,5 +78,8 @@ Route::put('/order/accept/{id}',[OrderController::class,'accept']);
 //Thống kê
 Route::get('/analytic/quantityData',[AnalyticController::class,'quantityDataTable']);
 Route::get('/analytic/revenueData',[AnalyticController::class,'revenueData']);
+Route::get('/analytic/getOrderTour',[AnalyticController::class,'getTourOrdersCount']);
 //Hướng dẫn viên
 Route::get('/guide',[GuideController::class,'index']);
+//Mã giảm giá
+Route::post('/apply-discount',[DiscountController::class,'applyDiscount']);
