@@ -79,6 +79,7 @@ Route::put('/order/accept/{id}',[OrderController::class,'accept']);
 Route::get('/analytic/quantityData',[AnalyticController::class,'quantityDataTable']);
 Route::get('/analytic/revenueData',[AnalyticController::class,'revenueData']);
 Route::get('/analytic/getOrderTour',[AnalyticController::class,'getTourOrdersCount']);
+Route::get('/analytic/getPriceTour',[AnalyticController::class,'getPriceOfTour']);
 //Hướng dẫn viên
 Route::get('/guide',[GuideController::class,'index']);
 //Mã giảm giá
