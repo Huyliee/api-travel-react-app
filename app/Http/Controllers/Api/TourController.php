@@ -64,9 +64,6 @@ class TourController extends Controller
             $query->where('adult_price', '>=', $price);
         }
     
-        if (!empty($tourType)) {
-            $query->where('tour_type', $tourType);
-        }
 
         if (!empty($tourLocationId)) {
             $query->whereHas('location', function ($q) use ($tourLocationId) {
@@ -75,7 +72,7 @@ class TourController extends Controller
         }
 
                 
-        $tours = $query->get();
+        $tours = $query->paginate(4);
     
         return response()->json(['tours' => $tours]);
     }
