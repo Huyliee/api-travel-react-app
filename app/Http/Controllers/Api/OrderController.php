@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Api\Order;
 use App\Models\Api\Tour;
+use App\Models\Api\DetailOrder;
 
 class OrderController extends Controller
 {
@@ -91,9 +92,11 @@ public function orderCustomer($id)
     public function show($id)
     {
         $order = Order::with('detail_order','date_go','payment')->find($id);
+        $detailOrder = DetailOrder::where('id_order',$order->id_order_tour)->first();
         $arr = [
             'status' => true,
-            'data' => $order
+            'data' => $order,
+            'detail'=>$detailOrder
         ];
         return response()->json($arr,200);
         

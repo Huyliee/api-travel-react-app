@@ -268,8 +268,9 @@ class TourController extends Controller
         $data['status']="No";
         $data['order_time'] = date("Y-m-d H:i:s");
         $data['id_order_tour'] = time();
+        $paymentMethod = $r->payment;
         $order = Order::create($data);
-        Mail::to($data['email'])->send(new OrderConfirmationMail($order));
+        Mail::to($data['email'])->send(new OrderConfirmationMail($order,$tour,$paymentMethod));
         $adultInfo = $r->input('detail.adultInfo');
         $childInfo = $r->input('detail.childInfo');
 

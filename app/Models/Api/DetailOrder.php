@@ -22,8 +22,8 @@ class DetailOrder extends Model
         'sex',
         'CMND',
         'birth',
-        'id_date',
-        'age'
+        'age',
+        'id',
     ];
 
     public function tour()

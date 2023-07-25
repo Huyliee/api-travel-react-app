@@ -161,7 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Wdey\Imgur\ImgurServiceProvider::class,
+        // Wdey\Imgur\ImgurServiceProvider::class,
 
         /*
          * Package Service Providers...

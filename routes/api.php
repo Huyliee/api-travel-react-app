@@ -64,6 +64,7 @@ Route::delete('/news/delete/{id}',[NewsController::class,'destroy']);
 Route::get('/datego',[DateGoController::class,'index']);
 Route::get('/datego/order/{id}',[DateGoController::class,'order']);
 Route::post('/datego/store',[DateGoController::class,'store']);
+Route::get('/datego/detail/{id}',[DateGoController::class,'show']);
 //Thanh toán online
 Route::post('/create-payment',[PaymentsController::class,'createPayments']);
 Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);

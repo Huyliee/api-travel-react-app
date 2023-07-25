@@ -72,7 +72,12 @@ class DateGoController extends Controller
      */
     public function show($id)
     {
-        //
+        $datego = DateGo::find($id);
+        $arr = [
+            'status' => true,
+            'data' => $datego,
+        ];
+        return response()->json($arr,200);
     }
 
     /**
