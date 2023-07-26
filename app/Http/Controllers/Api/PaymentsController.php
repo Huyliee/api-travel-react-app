@@ -140,10 +140,23 @@ class PaymentsController extends Controller
         $payments->id_customer = $r->input('id_customer');
         $payments->id_order = $r->input('id_order');
         $payments->amount_paid = $r->input('amount_paid');
+    
         $order = Order::find($payments->id_order);
-        $payments->amount_unpaid = $order['total_price'] - $payments->amount_paid;
+        $previousPayments = Payments::where('id_order', $r->input('id_order'))->get();
+    
+        if ($previousPayments->isEmpty()) {
+            // First payment for this order.
+            $payments->amount_unpaid = $order['total_price'] - $payments->amount_paid;
+        } else {
+            // Subsequent payments for this order.
+            $totalPaidAmount = $previousPayments->sum('amount_paid');
+            $payments->amount_unpaid = $order['total_price'] - $totalPaidAmount - $payments->amount_paid;
+            $payments->amount_paid += $r->input('amount_paid');
+        }
+    
         $payments->payment_methods = $r->input('payment_methods');
         $payments->save();
+    
         return response()->json($payments, 201);
     }
 }
