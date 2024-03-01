@@ -4,6 +4,7 @@ namespace App\Models\api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Api\DateGo;
+use App\Models\Api\Payments;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -25,6 +26,8 @@ class Order extends Model
         'address',
         'id_customer',
         'id_date',
+        'total_price',
+        'id_discount'
     ];
 
     public function detail_order()
@@ -35,6 +38,8 @@ class Order extends Model
     {
         return $this->belongsTo(DateGo::class,"id_date","id");
     }
-
-
+    public function payment()
+    {
+        return $this->hasMany(Payments::class,"id_order","id_order_tour");
+    }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Http;
+use App\Models\Api\Payments;
+use App\Models\Api\Order;
 
 class PaymentsController extends Controller
 {
@@ -97,7 +99,8 @@ class PaymentsController extends Controller
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua MoMo";
         $amount = $request->input('amount');
-        $orderId = time() . "";
+        $orderId = $request->input('orderId');
+        $idCustomer = $request->input('idCustomer');
         $redirectUrl = "http://localhost:3000/booking/payment/success";
         $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
         $extraData = "";
@@ -105,11 +108,12 @@ class PaymentsController extends Controller
            
         
             $requestId = time() . "";
-            $requestType = "payWithATM";
+            $requestType = "captureWallet";
             //before sign HMAC SHA256 signature
             $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
             $signature = hash_hmac("sha256", $rawHash, $secretKey);
             $data = array('partnerCode' => $partnerCode,
+                'idCustomer' => $idCustomer,
                 'partnerName' => "Test",
                 "storeId" => "MomoTestStore",
                 'requestId' => $requestId,
@@ -128,5 +132,30 @@ class PaymentsController extends Controller
         //  error_log( print_r( $jsonResult, true ) );
         // header('Location: '.$jsonResult['payUrl']);
         return response()->json($jsonResult);
+    }
+
+    public function paymentsOrder(Request $r){
+        $payments = new Payments;
+        $payments->id_customer = $r->input('id_customer');
+        $payments->id_order = $r->input('id_order');
+        $payments->amount_paid = $r->input('amount_paid');
+    
+        $order = Order::find($payments->id_order);
+        $previousPayments = Payments::where('id_order', $r->input('id_order'))->get();
+    
+        if ($previousPayments->isEmpty()) {
+            // First payment for this order.
+            $payments->amount_unpaid = $order['total_price'] - $payments->amount_paid;
+        } else {
+            // Subsequent payments for this order.
+            $totalPaidAmount = $previousPayments->sum('amount_paid');
+            $payments->amount_unpaid = $order['total_price'] - $totalPaidAmount - $payments->amount_paid;
+            $payments->amount_paid += $r->input('amount_paid');
+        }
+    
+        $payments->payment_methods = $r->input('payment_methods');
+        $payments->save();
+    
+        return response()->json($payments, 201);
     }
 }

@@ -115,7 +115,37 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $news = News::findOrFail($id);
+        $news->title_news = $request->input('title_news');
+        $news->date = $request->input('date');
+        $news->content_news = $request->input('content_news');
+     
+    
+        // if ($request->hasFile('img_tour')) {
+        //     $img_tour = $request->file('img_tour');
+            
+        //     // Lấy đường dẫn tạm thời của tệp tin
+        //     $tempFilePath = $img_tour->getPathname();
+      
+        //     $client = new Client();
+        //     $response = $client->request('POST', 'https://api.imgur.com/3/image', [
+        //         'headers' => [
+        //             'Authorization' => 'Bearer b1b610785d40e309d8111cbae409edbf55184545',
+        //         ],
+        //         'multipart' => [
+        //             [
+        //                 'name' => 'image',
+        //                 'contents' => fopen($tempFilePath, 'r'),
+        //             ],
+        //         ],
+        //     ]);
+      
+        //     $responseData = json_decode($response->getBody(), true);
+        //     $tour->img_tour = $responseData['data']['link'];
+        // }
+    
+        $news->save();
+        return response()->json($news, 201);
     }
 
     /**

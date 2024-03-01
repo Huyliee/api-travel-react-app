@@ -36,4 +36,65 @@ class AnalyticController extends Controller
 
     return response()->json($revenueData);
     }
+
+    public function getTourOrdersCount()
+    {
+        $tours = Tour::with('dateGo.order')->get();
+
+        $result = [];
+
+        foreach ($tours as $tour) {
+            $tourData = [
+                'tour_id' => $tour->id_tour,
+                'tour_name' => $tour->name_tour,
+                'order_count_by_date' => [],
+            ];
+
+            foreach ($tour->dateGo as $dateGo) {
+                $orderCount = $dateGo->order->count();
+
+                $tourData['order_count_by_date'][] = [
+                    'date_go' => $dateGo->date,
+                    'order_count' => $orderCount,
+                ];
+            }
+
+            $result[] = $tourData;
+        }
+
+        return response()->json($result);
+    }
+
+    public function getPriceOfTour(){
+        $tours = Tour::with(['dateGo.order'])->get();
+
+$result = [];
+
+foreach ($tours as $tour) {
+    $tourData = [
+        'tour_id' => $tour->id_tour,
+        'tour_name' => $tour->name_tour,
+        'order_count_by_date' => [],
+        'total_revenue' => 0, // Initialize total revenue to zero for each tour
+    ];
+
+    foreach ($tour->dateGo as $dateGo) {
+        $orderCount = $dateGo->order->count();
+        $totalRevenue = $dateGo->order->sum('total_price'); // Calculate the total revenue for this dateGo
+
+        $tourData['order_count_by_date'][] = [
+            'date_go' => $dateGo->date,
+            'order_count' => $orderCount,
+            'total_revenue' => $totalRevenue,
+        ];
+
+        $tourData['total_revenue'] += $totalRevenue; // Accumulate total revenue for each tour
+    }
+
+    $result[] = $tourData;
+}
+
+return response()->json($result);
+
+    }
 }

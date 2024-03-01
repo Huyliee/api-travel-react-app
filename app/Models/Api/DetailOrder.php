@@ -22,12 +22,16 @@ class DetailOrder extends Model
         'sex',
         'CMND',
         'birth',
-        'id_date',
-        'age'
+        'age',
+        'id',
     ];
 
     public function tour()
     {
         return $this->belongsTo(Tour::class, "id_tour", "id_tour");
+    }
+
+    public function ticket(){
+        return $this->haveMany(Ticket::class,'id_detail_order','id');
     }
 }

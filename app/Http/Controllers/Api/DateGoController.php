@@ -55,7 +55,13 @@ class DateGoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $dateGo = new DateGo;
+        $dateGo->id_tour = $request->input('id_tour');
+        $dateGo->date = $request->input('date');
+        $dateGo->id_guide = $request->input('id_guide');
+        $dateGo->seats = $request->input('seats');
+        $dateGo->save();
+        return response()->json($dateGo, 201);
     }
 
     /**
@@ -66,7 +72,12 @@ class DateGoController extends Controller
      */
     public function show($id)
     {
-        //
+        $datego = DateGo::find($id);
+        $arr = [
+            'status' => true,
+            'data' => $datego,
+        ];
+        return response()->json($arr,200);
     }
 
     /**

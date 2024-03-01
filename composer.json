@@ -11,7 +11,8 @@
         "illuminate/mail": "^8.83",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.15",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "wdey/laravel-imgur": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

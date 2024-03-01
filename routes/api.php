@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\DateGoController;
 use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AnalyticController;
+use App\Http\Controllers\Api\GuideController;
+use App\Http\Controllers\Api\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,14 +58,18 @@ Route::get('/location/{mien}',[LocationController::class,'loadLocation']);
 //tin tức 
 Route::get('/news',[NewsController::class,'index']);
 Route::post('/news/store',[NewsController::class,'store']);
+Route::put('/news/update/{id}',[NewsController::class,'update']);
 Route::get('/news/detail/{id}',[NewsController::class,'show']);
 Route::delete('/news/delete/{id}',[NewsController::class,'destroy']);
 //Danh sách ngày đi
 Route::get('/datego',[DateGoController::class,'index']);
 Route::get('/datego/order/{id}',[DateGoController::class,'order']);
+Route::post('/datego/store',[DateGoController::class,'store']);
+Route::get('/datego/detail/{id}',[DateGoController::class,'show']);
 //Thanh toán online
 Route::post('/create-payment',[PaymentsController::class,'createPayments']);
 Route::post('/momo-payment',[PaymentsController::class,'MomoPayment']);
+Route::post('/momo-payment/store',[PaymentsController::class,'paymentsOrder']);
 // Đơn đặt tour
 Route::get('/order',[OrderController::class,'index']);
 Route::get('/order/{id}',[OrderController::class,'findOrshder']);
